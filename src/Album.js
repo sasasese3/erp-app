@@ -36,36 +36,17 @@ const theme = createTheme();
 export default function Album() {
   useEffect(() => {
     const token = localStorage.getItem("token");
-    fetch("http://localhost:3333/authenUser", {
+    fetch("http://localhost:3333/authen", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        //เพิ่มเข้ามาเพื่อส่งไปตรวจสอบ
-        Authorization: "Bearer " + token,
+        'Authorization': 'Bearer '+token
       },
     })
       .then((response) => response.json())
       .then((data) => {
         if (data.status === "ok") {
-          alert("Authen sucess");
-        } else if (data.status === "error") {
-          fetch("http://localhost:3333/authenInspector", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              //เพิ่มเข้ามาเพื่อส่งไปตรวจสอบ
-              Authorization: "Bearer " + token,
-            },
-          })
-            .then((response) => response.json())
-            .then((data) => {
-              if (data.status === "error") {
-                alert("Authen failed");
-                localStorage.removeItem("token");
-                window.location = "/Login";
-              }
-            });
-        } else if (data.status === "ok") {
+            
           alert("Authen sucess");
         } else {
           alert("Authen failed");
@@ -77,6 +58,13 @@ export default function Album() {
         console.error("Error:", error);
       });
   }, []);
+
+    function Logout() {
+        localStorage.removeItem("token");
+        alert("Logout sucess");
+        window.location = "/Login";
+
+    }
 
   return (
     <ThemeProvider theme={theme}>
